@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TodoList.Configs;
 using TodoList.DTOs;
-using TaskStatus = TodoList.DTOs.TaskStatus;
+using TodoList.Entites;
 
 namespace TodoList.Controllers;
 
@@ -8,36 +9,22 @@ namespace TodoList.Controllers;
 [Route("todo-list")]
 public class TodoListController : ControllerBase
 {
+    private readonly TodoListDatabaseContext _databaseContext;
+
+    public TodoListController(TodoListDatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
+
     [HttpGet]
     public IEnumerable<TodoTaskDto> SearchAll()
     {
-        return new[]
-        {
-            new TodoTaskDto(1,
-                "foo",
-                "bar",
-                TaskStatus.Processing,
-                DateTime.Now,
-                EmergencyLevel.FuturePlan,
-                DateTime.Now
-            ),
-            new TodoTaskDto(2,
-                "foo bar",
-                "test",
-                TaskStatus.WaitResponse,
-                DateTime.Now,
-                EmergencyLevel.TopPriority,
-                DateTime.Now
-            ),
-            new TodoTaskDto(
-                3,
-                "Hello World!",
-                "Hello C# .NET!",
-                TaskStatus.Completed,
-                DateTime.Today,
-                EmergencyLevel.Normal,
-                DateTime.Now
-            )
-        };
+        return _databaseContext.TodoTasks.Select(ConvertEntityToDTO).ToList();
+    }
+
+    private TodoTaskDto ConvertEntityToDTO(TodoTask task)
+    {
+        return new TodoTaskDto(task!.Id, task.Title, task.Description,
+            task.Status, task.ExpirationDate, task.EmergencyLevel, task.CreateDate);
     }
 }
