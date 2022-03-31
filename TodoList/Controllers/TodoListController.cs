@@ -40,8 +40,4 @@ public class TodoListController : ControllerBase
             )
         };
     }
-
-    private void Foo()
-    {
-    }
 }
