@@ -22,7 +22,7 @@ public class TodoListController : ControllerBase
         return _databaseContext.TodoTasks.Select(ConvertEntityToDTO).ToList();
     }
 
-    private TodoTaskDto ConvertEntityToDTO(TodoTask task)
+    private static TodoTaskDto ConvertEntityToDTO(TodoTask task)
     {
         return new TodoTaskDto(task!.Id, task.Title, task.Description,
             task.Status, task.ExpirationDate, task.EmergencyLevel, task.CreateDate);
