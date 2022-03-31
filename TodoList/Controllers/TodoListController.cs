@@ -19,10 +19,10 @@ public class TodoListController : ControllerBase
     [HttpGet]
     public IEnumerable<TodoTaskDto> SearchAll()
     {
-        return _databaseContext.TodoTasks.Select(ConvertEntityToDTO).ToList();
+        return _databaseContext.TodoTasks.Select(ConvertEntityToDto).ToList();
     }
 
-    private static TodoTaskDto ConvertEntityToDTO(TodoTask task)
+    private static TodoTaskDto ConvertEntityToDto(TodoTask task)
     {
         return new TodoTaskDto(task!.Id, task.Title, task.Description,
             task.Status, task.ExpirationDate, task.EmergencyLevel, task.CreateDate);
