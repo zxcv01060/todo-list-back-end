@@ -5,9 +5,9 @@ namespace TodoList.Configs;
 
 public class TodoListDatabaseContext : DbContext
 {
+    public DbSet<TodoTask> TodoTasks { get; set; }
+
     public TodoListDatabaseContext(DbContextOptions<TodoListDatabaseContext> options) : base(options)
     {
     }
-
-    public DbSet<TodoTask> TodoTasks { get; set; }
 }
