@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+
 using TodoList.Configs;
 using TodoList.DTOs;
 using TodoList.Entites;
+using TodoList.Extensions;
+
 using TaskStatus = TodoList.DTOs.TaskStatus;
 
 namespace TodoList.Controllers;
@@ -53,6 +56,11 @@ public class TodoListController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TodoTaskDto>> Create([FromBody] TodoTaskForm todoTaskForm)
     {
+        if (ModelState.IsNotValid())
+        {
+            return BadRequest(ModelState);
+        }
+
         var task = ConvertFormToEntity(todoTaskForm);
         _databaseContext.TodoTasks.Add(task);
         await _databaseContext.SaveChangesAsync();
@@ -64,11 +72,11 @@ public class TodoListController : ControllerBase
     {
         return new TodoTask(
             null,
-            form.Title,
-            form.Description,
+            form.Title!,
+            form.Description!,
             form.Status ?? TaskStatus.NotProcessed,
-            form.ExpirationDate,
-            form.EmergencyLevel,
+            form.ExpirationDate!.Value,
+            form.EmergencyLevel!.Value,
             DateTime.Now,
             DateTime.Now
         );
