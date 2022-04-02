@@ -21,9 +21,11 @@ public class TodoListController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<TodoTaskDto> SearchAll()
+    public async Task<ActionResult<IEnumerable<TodoTaskDto>>> SearchAll()
     {
-        return _databaseContext.TodoTasks.Select(ConvertEntityToDto).ToList();
+        var result = await _databaseContext.TodoTasks.FindAsync(ConvertEntityToDto);
+
+        return Ok(result);
     }
 
     private static TodoTaskDto ConvertEntityToDto(TodoTask task)
