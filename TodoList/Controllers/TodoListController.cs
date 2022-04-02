@@ -37,7 +37,7 @@ public class TodoListController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/{id:int}")]
+    [Route("{id:int}")]
     public async Task<ActionResult<TodoTaskDto>> SearchById(int id)
     {
         var result = await _databaseContext.TodoTasks.FindAsync(id);
