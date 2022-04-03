@@ -10,7 +10,7 @@ using TaskStatus = TodoList.DTOs.TaskStatus;
 namespace TodoList.Controllers;
 
 [ApiController]
-[Route("todo-list")]
+[Route("api/[controller]")]
 public class TodoListController : ControllerBase
 {
     private readonly TodoListDatabaseContext _databaseContext;
