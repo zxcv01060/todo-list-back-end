@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using TodoList.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,5 +29,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+);
 
 app.Run();
