@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 
 using TodoList.Configs;
+using TodoList.Constants;
 using TodoList.DTOs;
 using TodoList.Entites;
 using TodoList.Extensions;
@@ -116,7 +117,7 @@ public class TodoListController : ControllerBase
         memoryStream.Seek(0, SeekOrigin.Begin);
         return File(
             memoryStream,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            HttpContentTypeConstants.ExcelWorkbook,
             "todo-list.xlsx"
         );
     }
