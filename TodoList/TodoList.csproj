@@ -10,6 +10,7 @@
         <PackageReference Include="EntityFramework" Version="6.4.4"/>
         <PackageReference Include="MySql.Data.EntityFramework" Version="8.0.28"/>
         <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.0"/>
+        <PackageReference Include="Open-XML-SDK" Version="2.9.1"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
 
