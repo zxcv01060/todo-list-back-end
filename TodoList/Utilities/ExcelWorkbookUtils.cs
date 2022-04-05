@@ -5,6 +5,25 @@ namespace TodoList.Utilities;
 
 public static class ExcelWorkbookUtils
 {
+    public static void AddHeaderRow(SheetData sheet, params string[] headers)
+    {
+        var header = new Row();
+        header.Append(headers.ToCellArray());
+        sheet.AppendChild(header);
+    }
+
+    private static OpenXmlElement[] ToCellArray(this IReadOnlyList<string> values)
+    {
+        var result = new OpenXmlElement[values.Count];
+
+        for (var i = 0; i < values.Count; i++)
+        {
+            result[i] = CreateCell(values[i]);
+        }
+
+        return result;
+    }
+
     public static Cell CreateCell(string value)
     {
         return new Cell

@@ -117,23 +117,42 @@ public class TodoListController : ControllerBase
         return new FileStreamResult(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
-    private void AddTaskDataTo(OpenXmlElement sheet)
+    private void AddTaskDataTo(SheetData sheet)
     {
         AddTaskDataHeader(sheet);
         foreach (var todoTask in _databaseContext.TodoTasks)
         {
-            var row = new Row();
-            row.Append(
-                ExcelWorkbookUtils.CreateCell(todoTask.Id ?? -1),
-                ExcelWorkbookUtils.CreateCell(todoTask.Title),
-                ExcelWorkbookUtils.CreateCell(todoTask.Description),
-                CreateCell(todoTask.Status),
-                ExcelWorkbookUtils.CreateCell(todoTask.ExpirationDate),
-                CreateCell(todoTask.EmergencyLevel),
-                ExcelWorkbookUtils.CreateCell(todoTask.CreateDate ?? DateTime.Now)
-            );
-            sheet.AppendChild(row);
+            AddTaskDataRow(sheet, todoTask);
         }
+    }
+
+    private static void AddTaskDataHeader(SheetData sheet)
+    {
+        ExcelWorkbookUtils.AddHeaderRow(
+            sheet,
+            "編號",
+            "標題",
+            "內容",
+            "狀態",
+            "期限",
+            "緊急程度",
+            "建立日期"
+        );
+    }
+
+    private static void AddTaskDataRow(SheetData sheet, TodoTask todoTask)
+    {
+        var row = new Row();
+        row.Append(
+            ExcelWorkbookUtils.CreateCell(todoTask.Id ?? -1),
+            ExcelWorkbookUtils.CreateCell(todoTask.Title),
+            ExcelWorkbookUtils.CreateCell(todoTask.Description),
+            CreateCell(todoTask.Status),
+            ExcelWorkbookUtils.CreateCell(todoTask.ExpirationDate),
+            CreateCell(todoTask.EmergencyLevel),
+            ExcelWorkbookUtils.CreateCell(todoTask.CreateDate ?? DateTime.Now)
+        );
+        sheet.AppendChild(row);
     }
 
     private static Cell CreateCell(TaskStatus status)
@@ -159,20 +178,5 @@ public class TodoListController : ControllerBase
             _ => "Undefined"
         };
         return ExcelWorkbookUtils.CreateCell(emergencyLevelString);
-    }
-
-    private void AddTaskDataHeader(OpenXmlElement sheet)
-    {
-        var header = new Row();
-        header.Append(
-            ExcelWorkbookUtils.CreateCell("編號"),
-            ExcelWorkbookUtils.CreateCell("標題"),
-            ExcelWorkbookUtils.CreateCell("內容"),
-            ExcelWorkbookUtils.CreateCell("狀態"),
-            ExcelWorkbookUtils.CreateCell("期限"),
-            ExcelWorkbookUtils.CreateCell("緊急程度"),
-            ExcelWorkbookUtils.CreateCell("建立日期")
-        );
-        sheet.AppendChild(header);
     }
 }
