@@ -114,7 +114,11 @@ public class TodoListController : ControllerBase
         }
 
         memoryStream.Seek(0, SeekOrigin.Begin);
-        return new FileStreamResult(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        return File(
+            memoryStream,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "todo-list.xlsx"
+        );
     }
 
     private void AddTaskDataTo(SheetData sheet)
