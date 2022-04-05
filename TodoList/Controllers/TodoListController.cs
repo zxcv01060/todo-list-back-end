@@ -8,6 +8,7 @@ using TodoList.Configs;
 using TodoList.DTOs;
 using TodoList.Entites;
 using TodoList.Extensions;
+using TodoList.Utilities;
 
 using TaskStatus = TodoList.DTOs.TaskStatus;
 
@@ -123,25 +124,16 @@ public class TodoListController : ControllerBase
         {
             var row = new Row();
             row.Append(
-                CreateCell(todoTask.Id ?? -1),
-                CreateCell(todoTask.Title),
-                CreateCell(todoTask.Description),
+                ExcelWorkbookUtils.CreateCell(todoTask.Id ?? -1),
+                ExcelWorkbookUtils.CreateCell(todoTask.Title),
+                ExcelWorkbookUtils.CreateCell(todoTask.Description),
                 CreateCell(todoTask.Status),
-                CreateCell(todoTask.ExpirationDate),
+                ExcelWorkbookUtils.CreateCell(todoTask.ExpirationDate),
                 CreateCell(todoTask.EmergencyLevel),
-                CreateCell(todoTask.CreateDate ?? DateTime.Now)
+                ExcelWorkbookUtils.CreateCell(todoTask.CreateDate ?? DateTime.Now)
             );
             sheet.AppendChild(row);
         }
-    }
-
-    private static Cell CreateCell(int value)
-    {
-        return new Cell
-        {
-            CellValue = new CellValue(value.ToString()),
-            DataType = new EnumValue<CellValues>(CellValues.Number)
-        };
     }
 
     private static Cell CreateCell(TaskStatus status)
@@ -154,16 +146,7 @@ public class TodoListController : ControllerBase
             TaskStatus.NotProcessed => "未處理",
             _ => "Undefined"
         };
-        return CreateCell(statusString);
-    }
-
-    private static Cell CreateCell(DateTime value)
-    {
-        return new Cell
-        {
-            CellValue = new CellValue(value),
-            DataType = new EnumValue<CellValues>(CellValues.Date)
-        };
+        return ExcelWorkbookUtils.CreateCell(statusString);
     }
 
     private static Cell CreateCell(EmergencyLevel emergencyLevel)
@@ -175,30 +158,21 @@ public class TodoListController : ControllerBase
             EmergencyLevel.FuturePlan => "未來計畫",
             _ => "Undefined"
         };
-        return CreateCell(emergencyLevelString);
+        return ExcelWorkbookUtils.CreateCell(emergencyLevelString);
     }
 
     private void AddTaskDataHeader(OpenXmlElement sheet)
     {
         var header = new Row();
         header.Append(
-            CreateCell("編號"),
-            CreateCell("標題"),
-            CreateCell("內容"),
-            CreateCell("狀態"),
-            CreateCell("期限"),
-            CreateCell("緊急程度"),
-            CreateCell("建立日期")
+            ExcelWorkbookUtils.CreateCell("編號"),
+            ExcelWorkbookUtils.CreateCell("標題"),
+            ExcelWorkbookUtils.CreateCell("內容"),
+            ExcelWorkbookUtils.CreateCell("狀態"),
+            ExcelWorkbookUtils.CreateCell("期限"),
+            ExcelWorkbookUtils.CreateCell("緊急程度"),
+            ExcelWorkbookUtils.CreateCell("建立日期")
         );
         sheet.AppendChild(header);
-    }
-
-    private static Cell CreateCell(string value)
-    {
-        return new Cell
-        {
-            CellValue = new CellValue(value),
-            DataType = new EnumValue<CellValues>(CellValues.String)
-        };
     }
 }
